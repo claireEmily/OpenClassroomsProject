@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeux</title>
+    <link href="style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul id="menuItems">
+                <li><a href="#j21">Le 21</a></li>
+                <li><a href="#memory">Mémory</a></li>
+                <li><a href="#colors">Jeu des couleurs</a></li>
+            </ul>
+            <h1 class="center"><a href="#homeSection">Let's play !</h1></a>
+            <img id="logo" src="Images\logo.png" alt="logo">
+        </nav>
+    </header>
+
+    <main>
+
+        <section id="homeSection">
+            <h2 class="center">Choisissez un jeu</h2>
+            <div id="s1">
+                <article class="game"><a href="#j21">
+
+                        <h3 class="gamePadding">Le 21</h3>
+                        <p class="gamePadding"> Le joueur doit réussir à obtenir un total de 21 points, dans l'idéal, ou
+                            s'en rapprocher le plus possible mais sans jamais
+                            dépasser ce chiffre fatidique de 21. Dès que le score obtenu dépasse 21, le joueur a perdu.
+                        </p>
+
+                    </a></article>
+
+                <article class="game">
+
+                    <h3 class="gamePadding">Mémory</h3>
+                    <p class="gamePadding">Comment jouer au jeu du mémory ?
+                        Le joueur retourne deux cartes. Si les images sont identiques, il gagne la paire constituée ; la
+                        partie est terminée
+                        lorsque toutes les cartes ont été assemblées par paires.</p>
+
+                </article>
+
+                <article class="game"><a href="#colors">
+
+                        <h3 class="gamePadding">Le jeu des couleurs</h3>
+                        <p class="gamePadding"> Le joueur doit faire le maximum de points en trouvant le plus rapidement
+                            possible la couleur du rectangle à l'écran, dans un temps
+                            imparti de 30 secondes. Attention, la couleur du mot ne correspond pas à la couleur du
+                            rectangle ! </p>
+
+                    </a></article>
+            </div>
+
+        </section>
+        <hr>
+        <section id="j21">
+            <form>
+                <h2>Le 21</h2>
+                <article id="article21">
+
+                    <div id="leftContent">
+                        <p>Lorsque c'est ton tour, choisis un nombre entre 1 et 3. Ne dépasse pas 21 !</p><br>
+                        <p id="tScore">Score : <span id="score">0</span></p><br>
+                        <div id="buttonsNumbers">
+                            <button type="button" id="number1" onClick="chosenNumber(this.id)">1</button>
+                            <button type="button" id="number2" onClick="chosenNumber(this.id)">2</button>
+                            <button type="button" id="number3" onClick="chosenNumber(this.id)">3</button>
+                        </div>
+                    </div>
+                    <div id="rightContent">
+                        <div id="botPlayer">
+                            <img id="botLogo" src="Images\bot.png" alt="robot">
+                            <button type="button" id="bot" onClick="robot()">Clique pour que je joue !</button>
+                        </div>
+                    </div>
+                    <button type="button" id="restart" onClick="newGame21()">Recommencer</button>
+
+                </article>
+            </form>
+        </section>
+        <hr>
+        <section id="colors">
+            <form>
+                <article>
+                    <h2>Le jeu des couleurs</h2>
+                    <p>Tu as 30 secondes pour donner le maximum de bonnes réponses : quelle est la couleur du rectangle
+                        ?</p>
+                    <br>
+                    <p id="wordColor"><span id="padding"></span></p><br>
+                    <p id="tpoints">Score : <span id="points">0</span></p><br>
+                    <div id="buttonsColors">
+                        <button type="button" id="word1" onclick="chosenColor('R')" class="display_none"
+                            class="btnColor"><span id="R">ROUGE</span></button>
+                        <button type="button" id="word2" onclick="chosenColor('B')" class="display_none"
+                            class="btnColor"><span id="B">BLEU</span></button>
+                        <button type="button" id="word3" onclick="chosenColor('V')" class="display_none"
+                            class="btnColor"><span id="V">VERT</span></button>
+                        <button type="button" id="word4" onclick="chosenColor('J')" class="display_none"
+                            class="btnColor"><span id="J">JAUNE</span></button>
+                    </div><br>
+                    <p id="chrono"></p><br>
+                    <button type="button" id="startButton" onClick="startGame()">GO !</button>
+
+
+                    <button type="button" id="refresh" onClick="newGameColors()"
+                        class="display_none">Recommencer</button>
+
+                </article>
+            </form>
+
+        </section>
+        <hr>
+    </main>
+    <script>
+
+        // Jeu 21
+
+        function nbr() {
+            return Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+        }
+
+        function chosenNumber(ele) {
+            document.getElementById("bot").innerHTML = "Clique pour que je joue !";
+            document.getElementById("bot").removeAttribute("disabled", "");
+            var score = parseInt(document.getElementById("score").innerHTML);
+            var n = parseInt(document.getElementById(ele).innerHTML);
+            var newScore = score + n;
+            document.getElementById("score").innerHTML = "" + newScore;
+            if (newScore > 21) {
+                document.getElementById("score").innerHTML = "" + newScore;
+                red();
+                document.getElementById("bot").innerHTML = "Tu as perdu ! Tu veux retenter ta chance ?";
+                document.getElementById("bot").setAttribute("disabled", "");
+            } else if (newScore == 21) {
+                document.getElementById("bot").innerHTML = "Tu as gagné, bravo !";
+                green();
+                document.getElementById("bot").setAttribute("disabled", "");
+            }
+            buttonsDisabled();
+        }
+
+
+        function robot() {
+            buttonsAbled();
+            var score = parseInt(document.getElementById("score").innerHTML);
+            var n = nbr();
+            var newScore = score + n;
+            var t = document.getElementById("bot").innerHTML;
+            document.getElementById("score").innerHTML = "" + newScore;
+            if (newScore < 21) {
+                if (score == 0) {
+                    t = "Je commence ! ";
+                } else {
+                    t = "Je continue ! ";
+                }
+                document.getElementById("bot").innerHTML = t + "J'ai choisi " + n + "<br> A toi !";
+            } else if (newScore == 21) {
+                document.getElementById("bot").innerHTML = "J'ai choisi " + n + "<br> Ca fait 21, j'ai gagné !";
+                green();
+                buttonsDisabled();
+            } else if (newScore > 21) {
+                document.getElementById("bot").innerHTML = "J'ai choisi " + n + "<br> Perdu ! J'ai dépassé 21 :(";
+                red();
+                buttonsDisabled();
+            }
+            document.getElementById("bot").setAttribute("disabled", "");
+        }
+
+        function newGame21() {
+            document.getElementById("score").innerHTML = "" + 0;
+            document.getElementById("bot").innerHTML = "Clique pour que je joue !";
+            buttonsAbled();
+            document.getElementById("bot").removeAttribute("disabled", "");
+            document.getElementById("score").removeAttribute("class", "colorRed");
+            document.getElementById("score").removeAttribute("class", "colorGreen");
+
+        }
+
+        function buttonsDisabled() {
+            document.getElementById("number1").setAttribute("disabled", "");
+            document.getElementById("number2").setAttribute("disabled", "");
+            document.getElementById("number3").setAttribute("disabled", "");
+        }
+
+        function buttonsAbled() {
+            document.getElementById("number1").removeAttribute("disabled", "");
+            document.getElementById("number2").removeAttribute("disabled", "");
+            document.getElementById("number3").removeAttribute("disabled", "");
+        }
+
+        function red() {
+            document.getElementById("score").removeAttribute("class", "colorGreen");
+            document.getElementById("score").setAttribute("class", "colorRed");
+        }
+
+        function green() {
+            document.getElementById("score").removeAttribute("class", "colorRed");
+            document.getElementById("score").setAttribute("class", "colorGreen");
+        }
+
+        //Jeu des couleurs
+
+        function nbrForColors() {
+            return Math.floor(Math.random() * 4) + 1;
+        }
+
+
+        function chosenColor(ele) {
+            console.log("Element:", ele);
+            var choice = document.getElementById(ele).innerHTML;
+            console.log("Choice:", choice);
+            var gColor = document.getElementById("wordColor");
+            var pts = parseInt(document.getElementById("points").innerHTML);
+            if (choice === "JAUNE" && gColor.classList.contains("bgColorYellow")) {
+                document.getElementById("points").innerHTML = "" + (pts + 1);
+            } else if (choice === "ROUGE" && gColor.classList.contains("bgColorRed")) {
+                document.getElementById("points").innerHTML = "" + (pts + 1);
+            } else if (choice === "VERT" && gColor.classList.contains("bgColorGreen")) {
+                document.getElementById("points").innerHTML = "" + (pts + 1);
+            } else if (choice === "BLEU" && gColor.classList.contains("bgColorBlue")) {
+                document.getElementById("points").innerHTML = "" + (pts + 1);
+            }
+            validation();
+        }
+
+        function validation() {
+            var tabColor = ["padding", "R", "J", "B", "V"];
+            changeColor(tabColor);
+            var tabBgColor = ["wordColor", "word1", "word2", "word3", "word4"];
+            changeBgColor(tabBgColor);
+        }
+
+        function changeColor(ele) {
+            let i;
+            var colorNumber;
+            for (i = 0; i < ele.length; i++) {
+                colorNumber = nbr();
+                if (colorNumber == 1) {
+                    setColorRed(ele[i]);
+                    document.getElementById("R").innerHTML = "BLEU";
+                    document.getElementById("V").innerHTML = "JAUNE";
+                    document.getElementById("B").innerHTML = "ROUGE";
+                    document.getElementById("J").innerHTML = "VERT";
+                    document.getElementById("padding").innerHTML = "BLEU";
+                } else if (colorNumber == 2) {
+                    setColorGreen(ele[i]);
+                    document.getElementById("R").innerHTML = "VERT";
+                    document.getElementById("V").innerHTML = "BLEU";
+                    document.getElementById("B").innerHTML = "JAUNE";
+                    document.getElementById("J").innerHTML = "ROUGE";
+                    document.getElementById("padding").innerHTML = "JAUNE";
+
+                } else if (colorNumber == 3) {
+                    setColorYellow(ele[i]);
+                    document.getElementById("R").innerHTML = "JAUNE";
+                    document.getElementById("V").innerHTML = "VERT";
+                    document.getElementById("B").innerHTML = "BLEU";
+                    document.getElementById("J").innerHTML = "ROUGE";
+                    document.getElementById("padding").innerHTML = "ROUGE";
+
+                } else if (colorNumber == 4) {
+                    setColorBlue(ele[i]);
+                    document.getElementById("R").innerHTML = "ROUGE";
+                    document.getElementById("V").innerHTML = "VERT";
+                    document.getElementById("B").innerHTML = "JAUNE";
+                    document.getElementById("J").innerHTML = "BLEU";
+                    document.getElementById("padding").innerHTML = "VERT";
+
+                }
+            }
+        }
+
+        function changeBgColor(ele) {
+            let i;
+            var colorNumber;
+            for (i = 0; i < ele.length; i++) {
+                colorNumber = nbr();
+                if (colorNumber === 1) {
+                    setBgColorGreen(ele[i]);
+                } else if (colorNumber === 2) {
+                    setBgColorRed(ele[i]);
+                } else if (colorNumber === 3) {
+                    setBgColorYellow(ele[i]);
+                } else if (colorNumber === 4) {
+                    setBgColorBlue(ele[i]);
+                }
+
+            }
+        }
+
+        function startGame() {
+            document.getElementById("refresh").removeAttribute("class", "display_none");
+            document.getElementById("startButton").setAttribute("class", "display_none");
+            document.getElementById("word1").removeAttribute("class", "display_none");
+            document.getElementById("word2").removeAttribute("class", "display_none");
+            document.getElementById("word3").removeAttribute("class", "display_none");
+            document.getElementById("word4").removeAttribute("class", "display_none");
+            validation();
+            let secondes = 30;
+
+            // élément où afficher le décompte
+            let top = document.getElementById("chrono");
+
+            // lance l'exécution de la fonction à toutes les secondes
+
+
+            // Incrément le nombre de secondes, affiche cette quantité
+            // et arrête automatiquement après une minute.
+
+            var time = window.setInterval(go, 1000);
+
+            function go() {
+                secondes--;
+                top.innerHTML = secondes;
+                var refresh = document.getElementById("refresh");
+                if (secondes == 0) {
+                    document.getElementById("word1").setAttribute("disabled", "");
+                    document.getElementById("word2").setAttribute("disabled", "");
+                    document.getElementById("word3").setAttribute("disabled", "");
+                    document.getElementById("word4").setAttribute("disabled", "");
+                    // arrête l'exécution lancée par setInterval()
+                    window.clearTimeout(time);
+                }
+            }
+        }
+
+        function setColorRed(ele) {
+            document.getElementById(ele).removeAttribute("class", "colorBlue");
+            document.getElementById(ele).removeAttribute("class", "colorGreen");
+            document.getElementById(ele).removeAttribute("class", "colorYellow");
+            document.getElementById(ele).setAttribute("class", "colorRed");
+        }
+
+        function setColorGreen(ele) {
+            document.getElementById(ele).removeAttribute("class", "colorBlue");
+            document.getElementById(ele).removeAttribute("class", "colorRed");
+            document.getElementById(ele).removeAttribute("class", "colorYellow");
+            document.getElementById(ele).setAttribute("class", "colorGreen");
+        }
+
+        function setColorBlue(ele) {
+            document.getElementById(ele).removeAttribute("class", "colorRed");
+            document.getElementById(ele).removeAttribute("class", "colorGreen");
+            document.getElementById(ele).removeAttribute("class", "colorYellow");
+            document.getElementById(ele).setAttribute("class", "colorBlue");
+        }
+
+        function setColorYellow(ele) {
+            document.getElementById(ele).removeAttribute("class", "colorBlue");
+            document.getElementById(ele).removeAttribute("class", "colorGreen");
+            document.getElementById(ele).removeAttribute("class", "colorRed");
+            document.getElementById(ele).setAttribute("class", "colorYellow");
+        }
+
+        function setBgColorRed(ele) {
+            document.getElementById(ele).removeAttribute("class", "bgColorBlue");
+            document.getElementById(ele).removeAttribute("class", "bgColorGreen");
+            document.getElementById(ele).removeAttribute("class", "bgColorYellow");
+            document.getElementById(ele).setAttribute("class", "bgColorRed");
+        }
+
+        function setBgColorGreen(ele) {
+            document.getElementById(ele).removeAttribute("class", "bgColorBlue");
+            document.getElementById(ele).removeAttribute("class", "bgColorRed");
+            document.getElementById(ele).removeAttribute("class", "bgColorYellow");
+            document.getElementById(ele).setAttribute("class", "bgColorGreen");
+        }
+
+        function setBgColorBlue(ele) {
+            document.getElementById(ele).removeAttribute("class", "bgColorRed");
+            document.getElementById(ele).removeAttribute("class", "bgColorGreen");
+            document.getElementById(ele).removeAttribute("class", "bgColorYellow");
+            document.getElementById(ele).setAttribute("class", "bgColorBlue");
+        }
+
+        function setBgColorYellow(ele) {
+            document.getElementById(ele).removeAttribute("class", "bgColorBlue");
+            document.getElementById(ele).removeAttribute("class", "bgColorGreen");
+            document.getElementById(ele).removeAttribute("class", "bgColorRed");
+            document.getElementById(ele).setAttribute("class", "bgColorYellow");
+        }
+
+
+        function newGameColors() {
+            window.location.reload();
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
